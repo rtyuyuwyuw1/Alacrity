@@ -1,262 +1,377 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <title>Alacrity-The Best Executor</title>
-    <link rel="icon" href="Alacrity.png" type="image/png">
-    <link rel="apple-touch-icon" href="Synapse_Icon.png">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alacrity</title>
 
-        body, html {
-            height: 100%;
-            font-family: "Segoe UI", Tahoma, sans-serif;
-            color: white;
-            text-align: center;
-        }
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
-        body {
-            background: url("background.jpg") no-repeat center center fixed;
-            background-size: cover;
-        }
+  <style>
+    :root {
+      --bg-dark: #0b0f12;
+      --panel-dark: rgba(255,255,255,0.03);
+      --glass-border: rgba(255,255,255,0.04);
+      --muted: #9aa3a9;
+      --accent-1: #4ea8ff;
+      --accent-2: #9b4dff;
+      --card-glow: rgba(80,90,140,0.06);
+      --radius: 12px;
+      --max-width: 1200px;
+    }
 
-        /* 導覽列 */
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-            z-index: 10;
-        }
+    * { box-sizing: border-box; margin: 0; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: radial-gradient(1200px 400px at 85% 20%, rgba(22,78,139,0.14), transparent 6%),
+                  radial-gradient(800px 300px at 10% 85%, rgba(78,32,120,0.12), transparent 6%),
+                  linear-gradient(180deg, #061018 0%, #071017 40%, #08060b 100%);
+      color: #e6eef3;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 60px;
+      min-height: 100vh;
+    }
 
-            .navbar h1 {
-                font-size: 20px;
-                font-weight: bold;
-                color: #fff;
-            }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 80px 80px, 80px 80px;
+      pointer-events: none;
+      opacity: 0.6;
+      mix-blend-mode: overlay;
+      z-index: 0;
+    }
 
-            .navbar ul {
-                list-style: none;
-                display: flex;
-                gap: 20px;
-            }
+    .wrap {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0px 20px 0px;
+      position: relative;
+      z-index: 1;
+    }
 
-                .navbar ul li a {
-                    text-decoration: none;
-                    font-size: 14px;
-                    color: #ddd;
-                    transition: color 0.3s ease;
-                }
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 40px;
+      align-items: center;
+      margin-top: 40px;
+      min-height: 380px;
+    }
+    .title {
+      font-weight: 800;
+      font-size: 50px;
+      line-height: 0.95;
+      letter-spacing: -1px;
+      color: #e9fbff;
+      font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+    }
+    .subtitle {
+      margin-top: 14px;
+      max-width: 640px;
+      color: var(--muted);
+      font-size: 16.5px;
+      line-height: 1.8;
+    }
 
-                    .navbar ul li a:hover {
-                        color: #fff;
-                    }
+    .cta-row {
+      margin-top: 28px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.06);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      transition: all 0.25s ease;
+      background: transparent;
+      color: #dbe9f2;
+    }
+    .btn-download {
+      background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+      color: white;
+      box-shadow: 0 8px 30px rgba(155,77,255,0.18);
+      background-size: 200% 200%;
+      border: none;
+    }
+    .btn-download:hover {
+      animation: gradientShift 3s infinite linear;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(155,77,255,0.3);
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .btn-ghost {
+      background: transparent;
+      color: #dbe9f2;
+      border: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(6px);
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.05);
+      transform: translateY(-2px);
+    }
 
-        /* Hero 區域 */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background: rgba(0,0,0,0.4);
-            padding: 0 20px;
-        }
+    .hero-right {
+      height: 340px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.02);
+      box-shadow: inset 0 -30px 60px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-family: JetBrains Mono, monospace;
+      font-size: 13px;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .hero-right .version-tag {
+      font-size: 15px;
+      font-weight: 600;
+      color: #b8d0f0;
+      background: rgba(78, 168, 255, 0.06);
+      padding: 6px 16px;
+      border-radius: 5px;
+      border: 1px solid rgba(78, 168, 255, 0.12);
+      letter-spacing: 0.3px;
+      backdrop-filter: blur(4px);
+    }
+    .hero-right .version-meta {
+      color: #6f7d8a;
+      font-size: 12px;
+      letter-spacing: 0.2px;
+    }
 
-            .hero h2 {
-                font-size: 48px;
-                margin-bottom: 20px;
-            }
+    .section {
+      margin-top: 80px;
+    }
+    .section h2 {
+      font-size: 40px;
+      margin: 0 0 12px 0;
+      font-weight: 700;
+    }
+    .section p.lead {
+      color: var(--muted);
+      max-width: 760px;
+      line-height: 1.8;
+    }
 
-            .hero p {
-                font-size: 18px;
-                margin-bottom: 20px;
-                color: #ccc;
-            }
+    .cards {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.008));
+      border-radius: 14px;
+      padding: 20px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 6px 28px var(--card-glow);
+      transition: transform .22s ease, box-shadow .22s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    }
+    .card .icon {
+      width: 46px; height: 46px;
+      border-radius: 10px;
+      background: rgba(10,20,30,0.6);
+      display: grid;
+      place-items: center;
+      margin-bottom: 10px;
+      border: 1px solid rgba(255,255,255,0.02);
+    }
+    .card h3 {
+      margin: 6px 0 10px 0;
+      font-size: 18px;
+    }
+    .card p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 14px;
+      margin: 0 0 10px 0;
+    }
+    .checks {
+      margin-top: 8px;
+      color: var(--accent-1);
+      font-size: 14px;
+    }
 
-        /* 按鈕群組 */
-        .btn-group {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 60px;
-        }
+    @media (max-width: 1100px) {
+      .hero { grid-template-columns: 1fr; gap: 28px; }
+      .hero-right { order: 2; height: 220px; }
+      .cards { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .wrap { padding: 20px; }
+      .title { font-size: 44px; }
+      .cards { grid-template-columns: 1fr; }
+      .hero { margin-top: 10px; }
+    }
 
-        .btn {
-            display: inline-block;
-            padding: 12px 28px;
-            border-radius: 6px;
-            font-size: 16px;
-            color: white;
-            text-decoration: none;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            backdrop-filter: blur(6px);
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
+    .hero > div:first-child {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeSlideIn 0.8s forwards 0.2s;
+    }
+    .hero-right {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeSlideIn 0.8s forwards 0.4s;
+    }
+    .cta-row .btn {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeSlideIn 0.8s forwards 0.6s;
+    }
+    .card {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: cardFadeSlide 0.6s forwards;
+    }
+    .card:nth-child(1) { animation-delay: 0.2s; }
+    .card:nth-child(2) { animation-delay: 0.35s; }
+    .card:nth-child(3) { animation-delay: 0.5s; }
+    .card:nth-child(4) { animation-delay: 0.65s; }
 
-            .btn:hover {
-                background: rgba(255,255,255,0.2);
-                transform: translateY(-2px);
-            }
-
-        /* Dropdown */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-            .dropdown .arrow {
-                display: inline-block;
-                margin-left: 6px;
-                transition: transform 0.3s ease;
-            }
-
-            .dropdown.show .arrow {
-                transform: rotate(180deg);
-            }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 6px;
-            min-width: 180px;
-            margin-top: 5px;
-            z-index: 100;
-            flex-direction: column;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-            .dropdown-content a {
-                color: white;
-                padding: 12px 20px;
-                text-decoration: none;
-                display: block;
-                font-size: 14px;
-                transition: background 0.3s ease;
-            }
-
-                .dropdown-content a:hover {
-                    background: rgba(255,255,255,0.2);
-                    transform: translateY(-1px);
-                }
-
-        .dropdown.show .dropdown-content {
-            display: flex;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* 特色卡片 */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            width: 80%;
-            margin: 0 auto 60px auto;
-        }
-
-        .card {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            backdrop-filter: blur(8px);
-            border-radius: 10px;
-            padding: 20px;
-            transition: transform 0.2s ease, background 0.3s ease;
-        }
-
-            .card:hover {
-                background: rgba(255,255,255,0.2);
-                transform: translateY(-5px);
-            }
-
-            .card h3 {
-                font-size: 20px;
-                margin-bottom: 10px;
-            }
-
-            .card p {
-                font-size: 14px;
-                color: #ddd;
-            }
-    </style>
+    @keyframes fadeSlideIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes cardFadeSlide {
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-    <div class="navbar">
-        <h1>Alacrity Executor/External</h1>
-        <ul>
-            <li><a href="https://getalacrity.github.io/Exploits-remake/">remakes</a></li>
-        </ul>
-    </div>
+  <main class="wrap">
+    <section class="hero" aria-label="Intro">
+      <div>
+        <h1 class="title">Alacrity</h1>
+        <p class="subtitle">
+          Alacrity is a fast, modern executor built for smooth script execution and developer-friendly integration.
+          Fast startup, low resource usage, and an intuitive interface make running scripts effortless.
+        </p>
 
-    <div class="hero">
-        <h2>Alacrity</h2>
-        <p>The ultimate Executor/External for Roblox</p>
-        <p>made by rty</p>
+        <div class="cta-row">
+          <a class="btn btn-download" href="https://github.com/getAlacrity/downloads/raw/refs/heads/main/Alacrity%20Installer.exe" id="downloadBtn" role="button" aria-label="Download Alacrity">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="opacity:0.95"><path d="M12 3v12M7 10l5 5 5-5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Download Alacrity
+          </a>
 
-        <div class="btn-group">
-            <!-- Download Dropdown -->
-            <div class="dropdown">
-                <a href="#" class="btn" id="downloadBtn">Download <span class="arrow">▼</span></a>
-                <div class="dropdown-content" id="dropdownMenu">
-                    <a href="https://github.com/getAlacrity/downloads/raw/refs/heads/main/Alacrity%20Installer.exe">Executor</a>
-                    <a href="https://github.com/getAlacrity/downloads/raw/refs/heads/main/Alacrity%20Legacy.zip">Executor Legacy</a>
-                    <a href="#">External(soon)</a>
-                </div>
-            </div>
-            <a href="https://discord.gg/3PwAy6Zy2D" class="btn">Join Discord</a>
+          <a class="btn btn-ghost" href="#" id="discordBtn" role="button" aria-label="Join Discord">
+            Join Discord
+          </a>
         </div>
+      </div>
 
-        <!-- 特色卡片 -->
-        <div class="features">
-            <div class="card">
-                <h3>High Performance</h3>
-                <p>Optimized for speed and stability to ensure smooth scripting execution.</p>
-            </div>
-            <div class="card">
-                <h3>Wide Compatibility</h3>
-                <p>Supports a variety of scripts with frequent updates for the latest Roblox versions.</p>
-            </div>
-            <div class="card">
-                <h3>User Friendly</h3>
-                <p>Simple and intuitive design, making it easy for anyone to use.</p>
-            </div>
-            <div class="card">
-                <h3>Secure</h3>
-                <p>Advanced protection features to keep your environment safe.</p>
-            </div>
+      <div class="hero-right" aria-hidden="true">
+        <div style="text-align:center; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <div style="font-size:13px;color:var(--muted); letter-spacing: 0.3px;">Alacrity · Lastest Version</div>
+          <div class="version-tag" id="versionDisplay">v0.0.0</div>
+          <div class="version-meta">perf optimized</div>
         </div>
-    </div>
+      </div>
+    </section>
 
-    <script>
-        const downloadBtn = document.getElementById('downloadBtn');
-        const dropdown = downloadBtn.parentElement;
+    <section class="section" id="features">
+      <h2>Features</h2>
+      <p class="lead">We deliver the ultimate user experience, prioritizing comfort and seamless interaction. And that's just the beginning—our features go far beyond to elevate your experience!</p>
 
-        downloadBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            dropdown.classList.toggle('show');
+      <div class="cards" role="list">
+        <article class="card" role="listitem" aria-labelledby="c1">
+          <div class="icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4v5c0 5-3.8 9.8-8 11-4.2-1.2-8-6-8-11V7l8-4z" stroke="#4ea8ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 id="c1">Secure &amp; Powerful</h3>
+          <p>Alacrity has everything you need for development, analysis, and execution. Our API empowers scripts with capabilities not found elsewhere.</p>
+          <div class="checks">✔ Rock-solid stability · ✔ Compatibility support</div>
+        </article>
+
+        <article class="card" role="listitem" aria-labelledby="c2">
+          <div class="icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M16 3H8v4H5v12h14V7h-3V3z" stroke="#4ea8ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 id="c2">Script Support</h3>
+          <p>Full scripting compatibility with fast execution and minimal latency—designed for devs and power users.</p>
+          <div class="checks">✔ Full script compatibility · ✔ Blazing performance</div>
+        </article>
+
+        <article class="card" role="listitem" aria-labelledby="c3">
+          <div class="icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12h3l2 6 4-12 2 6h3" stroke="#4ea8ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 id="c3">Optimization</h3>
+          <p>Lightweight and tuned for best-in-class performance so gameplay and scripts stay smooth.</p>
+          <div class="checks">✔ Effortless efficiency · ✔ Low resource use</div>
+        </article>
+
+        <article class="card" role="listitem" aria-labelledby="c4">
+          <div class="icon" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z" stroke="#4ea8ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.4 15a7.2 7.2 0 0 0 0-6l2.1-1.6-2.7-4.4L15.1 4a7.2 7.2 0 0 0-3.1-1.8L11 0h-4l-.9 2.2A7.2 7.2 0 0 0 2 4.1L.9 8.5 3.6 13l2.2-1.7a7.2 7.2 0 0 0 4.2 3.9L8 20h4l1.1-2.1c1 .2 2 .2 3.3 0z" stroke="#4ea8ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 id="c4">UI-Friendly Interface</h3>
+          <p>An intuitive and modern UI makes navigation effortless—sleek layout and minimal friction for users.</p>
+          <div class="checks">✔ Sleek UI · ✔ Effortless navigation</div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function() {
+      const discordBtn = document.getElementById('discordBtn');
+      if (discordBtn) {
+        discordBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          window.open('https://discord.com/invite/3PwAy6Zy2D');
         });
+      }
 
-        window.addEventListener('click', function (e) {
-            if (!dropdown.contains(e.target)) {
-                dropdown.classList.remove('show');
-            }
-        });
-    </script>
+      const VERSION_URL = 'https://raw.githubusercontent.com/getAlacrity/Alacrity-version/refs/heads/main/Version';
+      const versionDisplay = document.getElementById('versionDisplay');
+
+      async function fetchAndSetVersion() {
+        try {
+          const response = await fetch(VERSION_URL, { cache: 'no-cache' });
+          if (!response.ok) throw new Error('Version fatch failed');
+          const rawVersion = await response.text();
+          let trimmed = rawVersion.trim();
+          if (!trimmed.startsWith('v')) {
+            trimmed = 'v' + trimmed;
+          }
+          if (versionDisplay) {
+            versionDisplay.textContent = trimmed;
+          }
+        } catch (error) {
+
+        }
+      }
+
+      fetchAndSetVersion();
+    })();
+  </script>
 </body>
 </html>
