@@ -1,377 +1,626 @@
-<!doctype html>
-<html lang="zh">
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Alacrity</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alacrity</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --bg-dark: #0b0f12;
-      --panel-dark: rgba(255,255,255,0.03);
-      --glass-border: rgba(255,255,255,0.04);
-      --muted: #9aa3a9;
-      --accent-1: #4ea8ff;
-      --accent-2: #9b4dff;
-      --card-glow: rgba(80,90,140,0.06);
-      --radius: 12px;
-      --max-width: 1200px;
-    }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    * { box-sizing: border-box; margin: 0; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: radial-gradient(1200px 400px at 85% 20%, rgba(22,78,139,0.14), transparent 6%),
-                  radial-gradient(800px 300px at 10% 85%, rgba(78,32,120,0.12), transparent 6%),
-                  linear-gradient(180deg, #061018 0%, #071017 40%, #08060b 100%);
-      color: #e6eef3;
-      -webkit-font-smoothing: antialiased;
-      padding-bottom: 60px;
-      min-height: 100vh;
-    }
+        body {
+            background-color: #080808;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.01) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.01) 1px, transparent 1px);
-      background-size: 80px 80px, 80px 80px;
-      pointer-events: none;
-      opacity: 0.6;
-      mix-blend-mode: overlay;
-      z-index: 0;
-    }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-    .wrap {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 0px 20px 0px;
-      position: relative;
-      z-index: 1;
-    }
+        @keyframes fadeInWatermark {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-    .hero {
-      display: grid;
-      grid-template-columns: 1fr 420px;
-      gap: 40px;
-      align-items: center;
-      margin-top: 40px;
-      min-height: 380px;
-    }
-    .title {
-      font-weight: 800;
-      font-size: 50px;
-      line-height: 0.95;
-      letter-spacing: -1px;
-      color: #e9fbff;
-      font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
-      margin: 0;
-    }
-    .subtitle {
-      margin-top: 14px;
-      max-width: 640px;
-      color: var(--muted);
-      font-size: 16.5px;
-      line-height: 1.8;
-    }
+        .animate-item {
+            opacity: 0;
+            animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
-    .cta-row {
-      margin-top: 28px;
-      display: flex;
-      gap: 14px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .btn {
-      padding: 12px 18px;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.06);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 15px;
-      transition: all 0.25s ease;
-      background: transparent;
-      color: #dbe9f2;
-    }
-    .btn-download {
-      background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
-      color: white;
-      box-shadow: 0 8px 30px rgba(155,77,255,0.18);
-      background-size: 200% 200%;
-      border: none;
-    }
-    .btn-download:hover {
-      animation: gradientShift 3s infinite linear;
-      transform: translateY(-3px);
-      box-shadow: 0 12px 30px rgba(155,77,255,0.3);
-    }
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .btn-ghost {
-      background: transparent;
-      color: #dbe9f2;
-      border: 1px solid rgba(255,255,255,0.06);
-      backdrop-filter: blur(6px);
-    }
-    .btn-ghost:hover {
-      background: rgba(255,255,255,0.05);
-      transform: translateY(-2px);
-    }
+        .step-1 { animation-delay: 0.3s; }
+        .step-2 { animation-delay: 1s; }
+        .step-3 { animation-delay: 2s; }
+        .step-4 { animation-delay: 2.8s; }
 
-    .hero-right {
-      height: 340px;
-      border-radius: 16px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border: 1px solid rgba(255,255,255,0.02);
-      box-shadow: inset 0 -30px 60px rgba(0,0,0,0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
-      font-family: JetBrains Mono, monospace;
-      font-size: 13px;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .hero-right .version-tag {
-      font-size: 15px;
-      font-weight: 600;
-      color: #b8d0f0;
-      background: rgba(78, 168, 255, 0.06);
-      padding: 6px 16px;
-      border-radius: 5px;
-      border: 1px solid rgba(78, 168, 255, 0.12);
-      letter-spacing: 0.3px;
-      backdrop-filter: blur(4px);
-    }
-    .hero-right .version-meta {
-      color: #6f7d8a;
-      font-size: 12px;
-      letter-spacing: 0.2px;
-    }
+        .bg-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            font-size: 26vw;
+            line-height: 0.8;
+            color: rgba(255, 255, 255, 0.02);
+            white-space: nowrap;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeInWatermark 1s ease-out forwards 2.1s;
+        }
 
-    .section {
-      margin-top: 80px;
-    }
-    .section h2 {
-      font-size: 40px;
-      margin: 0 0 12px 0;
-      font-weight: 700;
-    }
-    .section p.lead {
-      color: var(--muted);
-      max-width: 760px;
-      line-height: 1.8;
-    }
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 950px;
+            padding: 20px;
+        }
 
-    .cards {
-      margin-top: 26px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 22px;
-    }
-    .card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.008));
-      border-radius: 14px;
-      padding: 20px;
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 6px 28px var(--card-glow);
-      transition: transform .22s ease, box-shadow .22s ease;
-    }
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    }
-    .card .icon {
-      width: 46px; height: 46px;
-      border-radius: 10px;
-      background: rgba(10,20,30,0.6);
-      display: grid;
-      place-items: center;
-      margin-bottom: 10px;
-      border: 1px solid rgba(255,255,255,0.02);
-    }
-    .card h3 {
-      margin: 6px 0 10px 0;
-      font-size: 18px;
-    }
-    .card p {
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 14px;
-      margin: 0 0 10px 0;
-    }
-    .checks {
-      margin-top: 8px;
-      color: var(--accent-1);
-      font-size: 14px;
-    }
+        .sub-header {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.45em;
+            color: #e5e7eb;
+            margin-bottom: 0px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: center;
+            gap: 0.4em;
+        }
 
-    @media (max-width: 1100px) {
-      .hero { grid-template-columns: 1fr; gap: 28px; }
-      .hero-right { order: 2; height: 220px; }
-      .cards { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 640px) {
-      .wrap { padding: 20px; }
-      .title { font-size: 44px; }
-      .cards { grid-template-columns: 1fr; }
-      .hero { margin-top: 10px; }
-    }
+        .word-inline {
+            display: inline-block;
+        }
 
-    .hero > div:first-child {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeSlideIn 0.8s forwards 0.2s;
-    }
-    .hero-right {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeSlideIn 0.8s forwards 0.4s;
-    }
-    .cta-row .btn {
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeSlideIn 0.8s forwards 0.6s;
-    }
-    .card {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: cardFadeSlide 0.6s forwards;
-    }
-    .card:nth-child(1) { animation-delay: 0.2s; }
-    .card:nth-child(2) { animation-delay: 0.35s; }
-    .card:nth-child(3) { animation-delay: 0.5s; }
-    .card:nth-child(4) { animation-delay: 0.65s; }
+        .title-wrapper {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
 
-    @keyframes fadeSlideIn {
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes cardFadeSlide {
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+        .title-red {
+            font-family: 'Teko', sans-serif;
+            font-size: 8.5rem;
+            font-weight: 600;
+            color: #a33b43;
+            letter-spacing: 1px;
+            line-height: 0.85;
+            text-shadow: 0 4px 20px rgba(163, 59, 67, 0.25);
+        }
+
+        .title-white {
+            font-family: 'Teko', sans-serif;
+            font-size: 6.8rem;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 1px;
+            line-height: 0.85;
+        }
+
+        .description {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 24px;
+            letter-spacing: 0.2px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .btn-main {
+            background-color: #7a282f;
+            color: #ffffff;
+            padding: 8px 18px;
+            height: 38px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #99333b;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-main:hover {
+            background-color: #99333b;
+            transform: translateY(-2px);
+        }
+
+        .btn-expandable {
+            background-color: #111111;
+            color: #9ca3af;
+            height: 38px;
+            min-width: 38px;
+            padding: 0 11px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            text-decoration: none;
+            border: 1px solid #222222;
+            font-size: 0.85rem;
+            font-weight: 500;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .btn-expandable i {
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .btn-expandable .btn-label {
+            max-width: 0;
+            opacity: 0;
+            white-space: nowrap;
+            transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 0.2s ease, 
+                        margin-left 0.3s ease;
+            margin-left: 0;
+        }
+
+        .btn-expandable:hover {
+            color: #ffffff;
+            background-color: #1a1a1a;
+            border-color: #333333;
+            padding: 0 14px;
+            transform: translateY(-2px);
+        }
+
+        .btn-expandable:hover .btn-label {
+            max-width: 100px;
+            opacity: 1;
+            margin-left: 8px;
+        }
+
+        /* 頁尾 */
+        .footer-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .footer-text a {
+            color: #9ca3af;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .footer-text a.highlight {
+            color: #a33b43;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .legal-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #080808;
+            z-index: 9999;
+            overflow-y: auto;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .legal-modal.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .legal-content-container {
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 60px 24px 80px 24px;
+            text-align: left;
+        }
+
+        .btn-back {
+            background-color: #161616;
+            color: #d1d5db;
+            border: 1px solid #2a2a2a;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 24px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #222222;
+            color: #ffffff;
+            border-color: #444444;
+        }
+
+        .legal-subtag {
+            color: #a33b43;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .legal-main-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 4rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 0.95;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .legal-subtitle {
+            font-size: 0.88rem;
+            color: #6b7280;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .legal-section {
+            margin-bottom: 28px;
+        }
+
+        .legal-section h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .legal-section p {
+            font-size: 0.85rem;
+            color: #a3a3a3;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .legal-section ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 8px;
+        }
+
+        .legal-section ul li {
+            font-size: 0.85rem;
+            color: #888888;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .legal-section ul li::before {
+            content: "•";
+            color: #a33b43;
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+            line-height: 0.8;
+            top: 2px;
+        }
+
+        .highlight-text {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .alert-box {
+            background-color: #121212;
+            border-left: 3px solid #a33b43;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-top: 16px;
+            font-size: 0.83rem;
+            color: #d1d5db;
+        }
+
+        .legal-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #1a1a1a;
+            font-size: 0.72rem;
+            color: #4b5563;
+        }
+
+        @media (max-width: 650px) {
+            .bg-watermark {
+                font-size: 32vw;
+            }
+            .title-red {
+                font-size: 5.5rem;
+            }
+            .title-white {
+                font-size: 4.2rem;
+            }
+            .sub-header {
+                font-size: 0.75rem;
+                letter-spacing: 0.2em;
+            }
+            .button-group {
+                flex-wrap: wrap;
+            }
+            .legal-main-title {
+                font-size: 2.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <main class="wrap">
-    <section class="hero" aria-label="Intro">
-      <div>
-        <h1 class="title">Alacrity</h1>
-        <p class="subtitle">
-          Alacrity is a fast, modern executor built for smooth script execution and developer-friendly integration.
-          Fast startup, low resource usage, and an intuitive interface make running scripts effortless.
+
+    <div class="bg-watermark">ALACRITY</div>
+
+    <div class="container">
+        <div class="sub-header">
+            <span class="word-inline animate-item step-1">THIS</span>
+            <span class="word-inline animate-item step-2">IS</span>
+        </div>
+
+        <div class="title-wrapper animate-item step-3">
+            <span class="title-red">ALACRITY</span>
+            <span class="title-white">V4.0</span>
+        </div>
+
+        <p class="description animate-item step-4">
+            Alacrity is free to use, but requires completion of the key system before access is granted.
         </p>
 
-        <div class="cta-row">
-          <a class="btn btn-download" href="https://github.com/getAlacrity/downloads/raw/refs/heads/main/Alacrity%20Installer.exe" id="downloadBtn" role="button" aria-label="Download Alacrity">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="opacity:0.95"><path d="M12 3v12M7 10l5 5 5-5" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Download Alacrity
-          </a>
+        <div class="button-group animate-item step-4">
+            <a href="#" class="btn-main">
+                <i class="fa-solid fa-download"></i> Download
+            </a>
 
-          <a class="btn btn-ghost" href="#" id="discordBtn" role="button" aria-label="Join Discord">
-            Join Discord
-          </a>
+            <button class="btn-expandable" title="FAQ" onclick="openModal('faq-modal')">
+                <i class="fa-regular fa-circle-question"></i>
+                <span class="btn-label">FAQ</span>
+            </button>
+
+            <a href="https://discord.gg/3PwAy6Zy2D" class="btn-expandable" title="Community" target="_blank">
+                <i class="fa-solid fa-gamepad"></i>
+                <span class="btn-label">Community</span>
+            </a>
         </div>
-      </div>
 
-      <div class="hero-right" aria-hidden="true">
-        <div style="text-align:center; display: flex; flex-direction: column; align-items: center; gap: 6px;">
-          <div style="font-size:13px;color:var(--muted); letter-spacing: 0.3px;">Alacrity · Lastest Version</div>
-          <div class="version-tag" id="versionDisplay">v0.0.0</div>
-          <div class="version-meta">perf optimized</div>
+        <div class="footer-text animate-item step-4">
+            By downloading, you agree to our <a onclick="openModal('tos-modal')">Terms of Service</a> and <a onclick="openModal('privacy-modal')">Privacy Policy</a>.<br>
+            <a href="https://Alacrity.eu.cc" class="highlight">Alacrity.eu.cc</a> is the only official domain for this software.
         </div>
-      </div>
-    </section>
+    </div>
 
-    <section class="section" id="features">
-      <h2>Features</h2>
-      <p class="lead">We deliver the ultimate user experience, prioritizing comfort and seamless interaction. And that's just the beginning—our features go far beyond to elevate your experience!</p>
+    <div id="faq-modal" class="legal-modal">
+        <div class="legal-content-container">
+            <button class="btn-back" onclick="closeModal('faq-modal')">
+                <i class="fa-solid fa-arrow-left"></i> Back to Alacrity
+            </button>
+            <div class="legal-subtag">SUPPORT</div>
+            <h1 class="legal-main-title">VIRUSTOTAL & MALWARE ANALYZERS DETECTIONS EXPLAINED</h1>
+            <p class="legal-subtitle">Understanding false positives and how security tools flag our files.</p>
 
-      <div class="cards" role="list">
-        <article class="card" role="listitem" aria-labelledby="c1">
-          <div class="icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3l8 4v5c0 5-3.8 9.8-8 11-4.2-1.2-8-6-8-11V7l8-4z" stroke="#4ea8ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h3 id="c1">Secure &amp; Powerful</h3>
-          <p>Alacrity has everything you need for development, analysis, and execution. Our API empowers scripts with capabilities not found elsewhere.</p>
-          <div class="checks">✔ Rock-solid stability · ✔ Compatibility support</div>
-        </article>
+            <div class="legal-section">
+                <h3>Why files are flagged</h3>
+                <ul>
+                    <li>Our installer and products are obfuscated with <span class="highlight-text">VMProtect/ConfuserEx</span> to prevent leaks or dumping.</li>
+                    <li>The installer downloads additional files from our official GitHub repos.</li>
+                    <li>VMProtect/ConfuserEx + downloader is heavily used by malware, so AVs flag it.</li>
+                    <li>In <span class="highlight-text">bin</span> folder we contain Velocity files and files that are can be flagged as trojan since they are used to read and write memory.</li>
+                </ul>
 
-        <article class="card" role="listitem" aria-labelledby="c2">
-          <div class="icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M16 3H8v4H5v12h14V7h-3V3z" stroke="#4ea8ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h3 id="c2">Script Support</h3>
-          <p>Full scripting compatibility with fast execution and minimal latency—designed for devs and power users.</p>
-          <div class="checks">✔ Full script compatibility · ✔ Blazing performance</div>
-        </article>
+                <div class="alert-box">
+                    These are <strong>false positives</strong>. Files are completely clean.
+                </div>
+            </div>
 
-        <article class="card" role="listitem" aria-labelledby="c3">
-          <div class="icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 12h3l2 6 4-12 2 6h3" stroke="#4ea8ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h3 id="c3">Optimization</h3>
-          <p>Lightweight and tuned for best-in-class performance so gameplay and scripts stay smooth.</p>
-          <div class="checks">✔ Effortless efficiency · ✔ Low resource use</div>
-        </article>
+            <div class="legal-section">
+                <p style="font-size: 0.8rem; color: #6b7280;">
+                    Complaining about VirusTotal without an actual issue will get ignored by our team.
+                </p>
+            </div>
+        </div>
+    </div>
 
-        <article class="card" role="listitem" aria-labelledby="c4">
-          <div class="icon" aria-hidden="true">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z" stroke="#4ea8ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.4 15a7.2 7.2 0 0 0 0-6l2.1-1.6-2.7-4.4L15.1 4a7.2 7.2 0 0 0-3.1-1.8L11 0h-4l-.9 2.2A7.2 7.2 0 0 0 2 4.1L.9 8.5 3.6 13l2.2-1.7a7.2 7.2 0 0 0 4.2 3.9L8 20h4l1.1-2.1c1 .2 2 .2 3.3 0z" stroke="#4ea8ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h3 id="c4">UI-Friendly Interface</h3>
-          <p>An intuitive and modern UI makes navigation effortless—sleek layout and minimal friction for users.</p>
-          <div class="checks">✔ Sleek UI · ✔ Effortless navigation</div>
-        </article>
-      </div>
-    </section>
-  </main>
+    <div id="tos-modal" class="legal-modal">
+        <div class="legal-content-container">
+            <button class="btn-back" onclick="closeModal('tos-modal')">
+                <i class="fa-solid fa-arrow-left"></i> Back to Alacrity
+            </button>
+            <div class="legal-subtag">LEGAL</div>
+            <h1 class="legal-main-title">TERMS OF SERVICE</h1>
+            <p class="legal-subtitle">Plain English. The rules for accessing and using Alacrity.</p>
 
-  <script>
-    (function() {
-      const discordBtn = document.getElementById('discordBtn');
-      if (discordBtn) {
-        discordBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          window.open('https://discord.com/invite/3PwAy6Zy2D');
-        });
-      }
+            <p style="font-size: 0.85rem; color: #a3a3a3; line-height: 1.6; margin-bottom: 24px;">
+                These Terms govern Alacrity accounts, key-system access, downloads, and software. By completing the key system, downloading, installing, or using Alacrity, you agree to these Terms. If you do not agree, do not use Alacrity.
+            </p>
 
-      const VERSION_URL = 'https://raw.githubusercontent.com/getAlacrity/Alacrity-version/refs/heads/main/Version';
-      const versionDisplay = document.getElementById('versionDisplay');
+            <div class="legal-section">
+                <h3>1. Eligibility and account responsibility</h3>
+                <p>You must be legally able to use the service in your region. You are responsible for your account, keys, devices, and activity. Never share passwords, session cookies, one-time codes, access tokens, or device credentials.</p>
+            </div>
 
-      async function fetchAndSetVersion() {
-        try {
-          const response = await fetch(VERSION_URL, { cache: 'no-cache' });
-          if (!response.ok) throw new Error('Version fatch failed');
-          const rawVersion = await response.text();
-          let trimmed = rawVersion.trim();
-          if (!trimmed.startsWith('v')) {
-            trimmed = 'v' + trimmed;
-          }
-          if (versionDisplay) {
-            versionDisplay.textContent = trimmed;
-          }
-        } catch (error) {
+            <div class="legal-section">
+                <h3>2. Free access and key system</h3>
+                <p>Alacrity is free to use. Access requires completing the official key system, which may issue limited-duration or single-use access. Keys are personal, non-transferable, have no cash value, and may not be sold, traded, or redistributed.</p>
+            </div>
 
+            <div class="legal-section">
+                <h3>3. Official sources and downloads</h3>
+                <p>Download Alacrity and obtain keys only through links published on the official Alacrity site. We are not responsible for fake domains, altered builds, unofficial sellers, or third-party scams. Bypassing, sharing, or reselling download and key-system tokens is prohibited.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>4. Prohibited use</h3>
+                <ul>
+                    <li>Redistributing, reselling, sublicensing, cracking, or modifying Alacrity.</li>
+                    <li>Using Alacrity for unlawful, harmful, fraudulent, or unauthorized activity.</li>
+                    <li>Bypassing keys, device limits, security controls, or rate limits.</li>
+                    <li>Sharing accounts, keys, sessions, tokens, or device credentials.</li>
+                    <li>Using Alacrity in a way that violates third-party rules or rights.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h3>5. Suspension and termination</h3>
+                <p>We may update, pause, suspend, or discontinue Alacrity at any time. Access may be suspended or terminated when we reasonably believe these Terms were violated, licensing was abused, fraud was attempted, or users and systems were placed at risk.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>6. Privacy and security</h3>
+                <p>Our Privacy Policy explains how account, key, device, support, request, and security data may be processed. Never paste code into a browser developer console at another person's request; this is a common account-theft technique.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>7. No affiliation</h3>
+                <p>Alacrity is an independent software product. References to third-party platforms, services, games, or trademarks do not imply affiliation, endorsement, sponsorship, or authorization.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>8. Warranty, liability, and risk</h3>
+                <p>Alacrity is provided "as is" and "as available." To the maximum extent permitted by law, we do not guarantee uninterrupted operation, compatibility, or error-free use and are not liable for indirect, incidental, special, consequential, or punitive damages.</p>
+                <p>You use Alacrity at your own risk. We are not responsible for actions taken by third-party platforms against your accounts, including warnings, restrictions, suspensions, or bans.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>9. Regional rights and changes</h3>
+                <p>Nothing in these Terms limits rights that cannot legally be waived. We may update these Terms by publishing a revised version on this page. Continued use after an update means you accept the revised Terms.</p>
+            </div>
+
+            <div class="legal-footer">
+                Last updated August 2, 2026
+            </div>
+        </div>
+    </div>
+
+    <div id="privacy-modal" class="legal-modal">
+        <div class="legal-content-container">
+            <button class="btn-back" onclick="closeModal('privacy-modal')">
+                <i class="fa-solid fa-arrow-left"></i> Back to Alacrity
+            </button>
+            <div class="legal-subtag">LEGAL</div>
+            <h1 class="legal-main-title">PRIVACY POLICY</h1>
+            <p class="legal-subtitle">Transparent & Simple. How Alacrity respects and handles your data.</p>
+
+            <p style="font-size: 0.85rem; color: #a3a3a3; line-height: 1.6; margin-bottom: 24px;">
+                This Privacy Policy outlines how Alacrity ("we", "our", or "us") collects, uses, and safeguards information when you access our website, complete our key system, or use our software application.
+            </p>
+
+            <div class="legal-section">
+                <h3>1. Information We Collect</h3>
+                <p>We operate under the principle of minimal data collection necessary for maintaining core functionalities:</p>
+                <ul>
+                    <li><strong>Device Identification:</strong> A anonymized hardware hash (HWID) or IP address may be processed solely to validate key system completions and prevent key abuse or multi-device spoofing.</li>
+                    <li><strong>Key System & Session Data:</strong> Temporary security tokens and access verification timestamps to manage your key validity duration.</li>
+                    <li><strong>Technical Logs:</strong> Automatic error logs, software version information, and basic server request headers used strictly for debugging, stability, and anti-DDoS protection.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h3>2. How We Use Information</h3>
+                <p>Collected technical data is used strictly for the following purposes:</p>
+                <ul>
+                    <li>To verify key system completion and deliver authorized access tokens.</li>
+                    <li>To enforce rate-limiting, detect key bypass mechanisms, and maintain system integrity.</li>
+                    <li>To monitor platform uptime and diagnose software crashes or compatibility issues.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h3>3. Third-Party Links & Services</h3>
+                <p>Our key system and website may integrate or link to third-party services (such as link shorteners, captcha providers, or Discord). We do not control and are not responsible for the privacy practices or content of these third-party websites. We encourage you to review their respective privacy policies.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>4. Data Protection & Security</h3>
+                <p>We implement appropriate technical measures to prevent unauthorized access, alteration, or destruction of key verification data. We do not store sensitive personal identification details such as real names, financial information, or personal physical addresses.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>5. Selling & Sharing Data</h3>
+                <p>We do NOT sell, rent, or trade your IP addresses, hardware hashes, or validation records to third parties for advertising or commercial marketing purposes.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>6. Data Retention</h3>
+                <p>Key validation logs, temporary security tokens, and IP request logs are automatically purged or rotated periodically once they are no longer required for system security and access verification.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>7. Policy Updates</h3>
+                <p>We reserve the right to revise or update this Privacy Policy as our features evolve. Any changes will be posted directly to this page with an updated revision date.</p>
+            </div>
+
+            <div class="legal-footer">
+                Last updated August 22, 2026
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
         }
-      }
 
-      fetchAndSetVersion();
-    })();
-  </script>
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
 </body>
 </html>
