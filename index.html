@@ -1,1 +1,901 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alacrity</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #080808;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInWatermark {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .animate-item {
+            opacity: 0;
+            animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .step-1 { animation-delay: 0.3s; }
+        .step-2 { animation-delay: 1s; }
+        .step-3 { animation-delay: 2s; }
+        .step-4 { animation-delay: 2.8s; }
+
+        .bg-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            font-size: 26vw;
+            line-height: 0.8;
+            color: rgba(255, 255, 255, 0.02);
+            white-space: nowrap;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            letter-spacing: 1px;
+            opacity: 0;
+            animation: fadeInWatermark 1s ease-out forwards 2.1s;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 950px;
+            padding: 20px;
+        }
+
+        .sub-header {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.45em;
+            color: #e5e7eb;
+            margin-bottom: 0px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: center;
+            gap: 0.4em;
+        }
+
+        .word-inline {
+            display: inline-block;
+        }
+
+        .title-wrapper {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .title-red {
+            font-family: 'Teko', sans-serif;
+            font-size: 8.5rem;
+            font-weight: 600;
+            color: #a33b43;
+            letter-spacing: 1px;
+            line-height: 0.85;
+            text-shadow: 0 4px 20px rgba(163, 59, 67, 0.25);
+        }
+
+        .title-white {
+            font-family: 'Teko', sans-serif;
+            font-size: 6.8rem;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 1px;
+            line-height: 0.85;
+        }
+
+        .description {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 24px;
+            letter-spacing: 0.2px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .btn-main {
+            background-color: #7a282f;
+            color: #ffffff;
+            padding: 8px 18px;
+            height: 38px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #99333b;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .btn-main:hover {
+            background-color: #99333b;
+            transform: translateY(-2px);
+        }
+
+        .btn-expandable {
+            background-color: #111111;
+            color: #9ca3af;
+            height: 38px;
+            min-width: 38px;
+            padding: 0 11px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            text-decoration: none;
+            border: 1px solid #222222;
+            font-size: 0.85rem;
+            font-weight: 500;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .btn-expandable i {
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .btn-expandable .btn-label {
+            max-width: 0;
+            opacity: 0;
+            white-space: nowrap;
+            transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                        opacity 0.2s ease, 
+                        margin-left 0.3s ease;
+            margin-left: 0;
+        }
+
+        .btn-expandable:hover {
+            color: #ffffff;
+            background-color: #1a1a1a;
+            border-color: #333333;
+            padding: 0 14px;
+            transform: translateY(-2px);
+        }
+
+        .btn-expandable:hover .btn-label {
+            max-width: 100px;
+            opacity: 1;
+            margin-left: 8px;
+        }
+
+        .footer-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .footer-text a {
+            color: #9ca3af;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .footer-text a.highlight {
+            color: #a33b43;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .download-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+
+        .download-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .download-modal-card {
+            background-color: #111111;
+            border: 1px solid #222222;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.03);
+            transform: scale(0.92) translateY(10px);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .download-modal-overlay.active .download-modal-card {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            color: #6b7280;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .btn-close:hover {
+            color: #ffffff;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .custom-dropdown-container {
+            position: relative;
+            flex: 1;
+            user-select: none;
+        }
+
+        .custom-dropdown-header {
+            background: #161616;
+            color: #e5e7eb;
+            border: 1px solid #2a2a2a;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+        }
+
+        .custom-dropdown-header:hover {
+            background-color: #1c1c1c;
+            border-color: #383838;
+            color: #ffffff;
+        }
+
+        .custom-dropdown-container.active .custom-dropdown-header {
+            border-color: #a33b43;
+            box-shadow: 0 0 0 3px rgba(163, 59, 67, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.4);
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.8rem;
+            color: #6b7280;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+        }
+
+        .custom-dropdown-container.active .dropdown-arrow {
+            transform: rotate(180deg);
+            color: #a33b43;
+        }
+
+        .custom-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            width: 100%;
+            background-color: #141414;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 4px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                        visibility 0.25s ease;
+            pointer-events: none;
+        }
+
+        .custom-dropdown-container.active .custom-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .dropdown-item {
+            padding: 10px 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #9ca3af;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.15s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #222222;
+            color: #ffffff;
+        }
+
+        .dropdown-item.selected {
+            background-color: rgba(163, 59, 67, 0.15);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .dropdown-item.selected::after {
+            content: "\f00c";
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: #a33b43;
+            font-size: 0.75rem;
+        }
+
+        .legal-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #080808;
+            z-index: 9999;
+            overflow-y: auto;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .legal-modal.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .legal-content-container {
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 60px 24px 80px 24px;
+            text-align: left;
+        }
+
+        .btn-back {
+            background-color: #161616;
+            color: #d1d5db;
+            border: 1px solid #2a2a2a;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 24px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #222222;
+            color: #ffffff;
+            border-color: #444444;
+        }
+
+        .legal-subtag {
+            color: #a33b43;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .legal-main-title {
+            font-family: 'Teko', sans-serif;
+            font-size: 4rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 0.95;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .legal-subtitle {
+            font-size: 0.88rem;
+            color: #6b7280;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .legal-section {
+            margin-bottom: 28px;
+        }
+
+        .legal-section h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .legal-section p {
+            font-size: 0.85rem;
+            color: #a3a3a3;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .legal-section ul {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 8px;
+        }
+
+        .legal-section ul li {
+            font-size: 0.85rem;
+            color: #888888;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .legal-section ul li::before {
+            content: "•";
+            color: #a33b43;
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+            line-height: 0.8;
+            top: 2px;
+        }
+
+        .highlight-text {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .alert-box {
+            background-color: #121212;
+            border-left: 3px solid #a33b43;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-top: 16px;
+            font-size: 0.83rem;
+            color: #d1d5db;
+        }
+
+        .legal-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #1a1a1a;
+            font-size: 0.72rem;
+            color: #4b5563;
+        }
+
+        @media (max-width: 650px) {
+            .bg-watermark {
+                font-size: 32vw;
+            }
+            .title-red {
+                font-size: 5.5rem;
+            }
+            .title-white {
+                font-size: 4.2rem;
+            }
+            .sub-header {
+                font-size: 0.75rem;
+                letter-spacing: 0.2em;
+            }
+            .button-group {
+                flex-wrap: wrap;
+            }
+            .legal-main-title {
+                font-size: 2.8rem;
+            }
+            .modal-body {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-watermark">ALACRITY</div>
+
+    <div class="container">
+        <div class="sub-header">
+            <span class="word-inline animate-item step-1">THIS</span>
+            <span class="word-inline animate-item step-2">IS</span>
+        </div>
+
+        <div class="title-wrapper animate-item step-3">
+            <span class="title-red">ALACRITY</span>
+            <span class="title-white">V4.0</span>
+        </div>
+
+        <p class="description animate-item step-4">
+            Alacrity is free to use, but requires completion of the key system before access is granted.
+        </p>
+
+        <div class="button-group animate-item step-4">
+            <button class="btn-main" onclick="openDownloadModal()">
+                <i class="fa-solid fa-download"></i> Download
+            </button>
+
+            <button class="btn-expandable" title="FAQ" onclick="openModal('faq-modal')">
+                <i class="fa-regular fa-circle-question"></i>
+                <span class="btn-label">FAQ</span>
+            </button>
+
+            <a href="https://discord.gg/3PwAy6Zy2D" class="btn-expandable" title="Community" target="_blank">
+                <i class="fa-solid fa-gamepad"></i>
+                <span class="btn-label">Community</span>
+            </a>
+        </div>
+
+        <div class="footer-text animate-item step-4">
+            By downloading, you agree to our <a onclick="openModal('tos-modal')">Terms of Service</a> and <a onclick="openModal('privacy-modal')">Privacy Policy</a>.<br>
+            <a href="https://Alacrity.eu.cc" class="highlight">Alacrity.eu.cc</a> is the only official domain for this software.
+        </div>
+    </div>
+
+    <div id="download-modal" class="download-modal-overlay" onclick="handleOverlayClick(event)">
+        <div class="download-modal-card">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fa-solid fa-sliders" style="color: #a33b43;"></i> Option
+                </div>
+                <button class="btn-close" onclick="closeDownloadModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="custom-dropdown-container" id="custom-dropdown">
+                    <div class="custom-dropdown-header" onclick="toggleDropdown()">
+                        <span id="selected-label">Executor(soon)</span>
+                        <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+                    </div>
+
+                    <div class="custom-dropdown-menu">
+                        <div class="dropdown-item selected" data-url="https://alacrity.eu.cc" onclick="selectOption(this)">
+                            Executor
+                        </div>
+                        <div class="dropdown-item" data-url="https://alacrity.eu.cc/Alacrity%20Loader.exe" onclick="selectOption(this)">
+                            External
+                        </div>
+                    </div>
+                </div>
+
+                <button id="modal-download-btn" class="btn-main" onclick="triggerDownload()">
+                    <i class="fa-solid fa-download"></i> Download
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="faq-modal" class="legal-modal">
+        <div class="legal-content-container">
+            <button class="btn-back" onclick="closeModal('faq-modal')">
+                <i class="fa-solid fa-arrow-left"></i> Back to Alacrity
+            </button>
+            <div class="legal-subtag">SUPPORT</div>
+            <h1 class="legal-main-title">VIRUSTOTAL & MALWARE ANALYZERS DETECTIONS EXPLAINED</h1>
+            <p class="legal-subtitle">Understanding false positives and how security tools flag our files.</p>
+
+            <div class="legal-section">
+                <h3>Why files are flagged</h3>
+                <ul>
+                    <li>Our installer and products are obfuscated with <span class="highlight-text">VMProtect/ConfuserEx</span> to prevent leaks or dumping.</li>
+                    <li>The installer downloads additional files from our official GitHub repos.</li>
+                    <li>VMProtect/ConfuserEx + downloader is heavily used by malware, so AVs flag it.</li>
+                    <li>In <span class="highlight-text">bin</span> folder we contain Velocity files and files that are can be flagged as trojan since they are used to read and write memory.</li>
+                </ul>
+
+                <div class="alert-box">
+                    These are <strong>false positives</strong>. Files are completely clean.
+                </div>
+            </div>
+
+            <div class="legal-section">
+                <p style="font-size: 0.8rem; color: #6b7280;">
+                    Complaining about VirusTotal without an actual issue will get ignored by our team.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="tos-modal" class="legal-modal">
+        <div class="legal-content-container">
+            <button class="btn-back" onclick="closeModal('tos-modal')">
+                <i class="fa-solid fa-arrow-left"></i> Back to Alacrity
+            </button>
+            <div class="legal-subtag">LEGAL</div>
+            <h1 class="legal-main-title">TERMS OF SERVICE</h1>
+            <p class="legal-subtitle">Plain English. The rules for accessing and using Alacrity.</p>
+
+            <p style="font-size: 0.85rem; color: #a3a3a3; line-height: 1.6; margin-bottom: 24px;">
+                These Terms govern Alacrity accounts, key-system access, downloads, and software. By completing the key system, downloading, installing, or using Alacrity, you agree to these Terms. If you do not agree, do not use Alacrity.
+            </p>
+
+            <div class="legal-section">
+                <h3>1. Eligibility and account responsibility</h3>
+                <p>You must be legally able to use the service in your region. You are responsible for your account, keys, devices, and activity. Never share passwords, session cookies, one-time codes, access tokens, or device credentials.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>2. Free access and key system</h3>
+                <p>Alacrity is free to use. Access requires completing the official key system, which may issue limited-duration or single-use access. Keys are personal, non-transferable, have no cash value, and may not be sold, traded, or redistributed.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>3. Official sources and downloads</h3>
+                <p>Download Alacrity and obtain keys only through links published on the official Alacrity site. We are not responsible for fake domains, altered builds, unofficial sellers, or third-party scams. Bypassing, sharing, or reselling download and key-system tokens is prohibited.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>4. Prohibited use</h3>
+                <ul>
+                    <li>Redistributing, reselling, sublicensing, cracking, or modifying Alacrity.</li>
+                    <li>Using Alacrity for unlawful, harmful, fraudulent, or unauthorized activity.</li>
+                    <li>Bypassing keys, device limits, security controls, or rate limits.</li>
+                    <li>Sharing accounts, keys, sessions, tokens, or device credentials.</li>
+                    <li>Using Alacrity in a way that violates third-party rules or rights.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h3>5. Suspension and termination</h3>
+                <p>We may update, pause, suspend, or discontinue Alacrity at any time. Access may be suspended or terminated when we reasonably believe these Terms were violated, licensing was abused, fraud was attempted, or users and systems were placed at risk.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>6. Privacy and security</h3>
+                <p>Our Privacy Policy explains how account, key, device, support, request, and security data may be processed. Never paste code into a browser developer console at another person's request; this is a common account-theft technique.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>7. No affiliation</h3>
+                <p>Alacrity is an independent software product. References to third-party platforms, services, games, or trademarks do not imply affiliation, endorsement, sponsorship, or authorization.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>8. Warranty, liability, and risk</h3>
+                <p>Alacrity is provided "as is" and "as available." To the maximum extent permitted by law, we do not guarantee uninterrupted operation, compatibility, or error-free use and are not liable for indirect, incidental, special, consequential, or punitive damages.</p>
+                <p>You use Alacrity at your own risk. We are not responsible for actions taken by third-party platforms against your accounts, including warnings, restrictions, suspensions, or bans.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>9. Regional rights and changes</h3>
+                <p>Nothing in these Terms limits rights that cannot legally be waived. We may update these Terms by publishing a revised version on this page. Continued use after an update means you accept the revised Terms.</p>
+            </div>
+
+            <div class="legal-footer">
+                Last updated August 2, 2026
+            </div>
+        </div>
+    </div>
+
+    <div id="privacy-modal" class="legal-modal">
+        <div class="legal-content-container">
+            <button class="btn-back" onclick="closeModal('privacy-modal')">
+                <i class="fa-solid fa-arrow-left"></i> Back to Alacrity
+            </button>
+            <div class="legal-subtag">LEGAL</div>
+            <h1 class="legal-main-title">PRIVACY POLICY</h1>
+            <p class="legal-subtitle">Transparent & Simple. How Alacrity respects and handles your data.</p>
+
+            <p style="font-size: 0.85rem; color: #a3a3a3; line-height: 1.6; margin-bottom: 24px;">
+                This Privacy Policy outlines how Alacrity ("we", "our", or "us") collects, uses, and safeguards information when you access our website, complete our key system, or use our software application.
+            </p>
+
+            <div class="legal-section">
+                <h3>1. Information We Collect</h3>
+                <p>We operate under the principle of minimal data collection necessary for maintaining core functionalities:</p>
+                <ul>
+                    <li><strong>Device Identification:</strong> A anonymized hardware hash (HWID) or IP address may be processed solely to validate key system completions and prevent key abuse or multi-device spoofing.</li>
+                    <li><strong>Key System & Session Data:</strong> Temporary security tokens and access verification timestamps to manage your key validity duration.</li>
+                    <li><strong>Technical Logs:</strong> Automatic error logs, software version information, and basic server request headers used strictly for debugging, stability, and anti-DDoS protection.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h3>2. How We Use Information</h3>
+                <p>Collected technical data is used strictly for the following purposes:</p>
+                <ul>
+                    <li>To verify key system completion and deliver authorized access tokens.</li>
+                    <li>To enforce rate-limiting, detect key bypass mechanisms, and maintain system integrity.</li>
+                    <li>To monitor platform uptime and diagnose software crashes or compatibility issues.</li>
+                </ul>
+            </div>
+
+            <div class="legal-section">
+                <h3>3. Third-Party Links & Services</h3>
+                <p>Our key system and website may integrate or link to third-party services (such as link shorteners, captcha providers, or Discord). We do not control and are not responsible for the privacy practices or content of these third-party websites. We encourage you to review their respective privacy policies.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>4. Data Protection & Security</h3>
+                <p>We implement appropriate technical measures to prevent unauthorized access, alteration, or destruction of key verification data. We do not store sensitive personal identification details such as real names, financial information, or personal physical addresses.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>5. Selling & Sharing Data</h3>
+                <p>We do NOT sell, rent, or trade your IP addresses, hardware hashes, or validation records to third parties for advertising or commercial marketing purposes.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>6. Data Retention</h3>
+                <p>Key validation logs, temporary security tokens, and IP request logs are automatically purged or rotated periodically once they are no longer required for system security and access verification.</p>
+            </div>
+
+            <div class="legal-section">
+                <h3>7. Policy Updates</h3>
+                <p>We reserve the right to revise or update this Privacy Policy as our features evolve. Any changes will be posted directly to this page with an updated revision date.</p>
+            </div>
+
+            <div class="legal-footer">
+                Last updated August 22, 2026
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function openDownloadModal() {
+            const downloadModal = document.getElementById('download-modal');
+            downloadModal.classList.add('active');
+        }
+
+        function closeDownloadModal() {
+            const downloadModal = document.getElementById('download-modal');
+            downloadModal.classList.remove('active');
+            const dropdown = document.getElementById('custom-dropdown');
+            if (dropdown) dropdown.classList.remove('active');
+        }
+
+        function handleOverlayClick(event) {
+            if (event.target.id === 'download-modal') {
+                closeDownloadModal();
+            }
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById('custom-dropdown');
+            dropdown.classList.toggle('active');
+        }
+
+        function selectOption(element) {
+            const labelText = element.innerText.trim();
+            document.getElementById('selected-label').innerText = labelText;
+
+            const items = document.querySelectorAll('.dropdown-item');
+            items.forEach(item => item.classList.remove('selected'));
+            element.classList.add('selected');
+
+            const dropdown = document.getElementById('custom-dropdown');
+            dropdown.classList.remove('active');
+        }
+
+        function triggerDownload() {
+            const selectedItem = document.querySelector('.dropdown-item.selected');
+            if (selectedItem) {
+                const downloadUrl = selectedItem.getAttribute('data-url');
+                if (downloadUrl) {
+                    window.open(downloadUrl, '_blank');
+                }
+            }
+        }
+
+        document.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('custom-dropdown');
+            if (dropdown && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
