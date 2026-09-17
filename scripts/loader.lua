@@ -36,4 +36,13 @@ elseif not name then
         "This game is not supported. Please join a supported game.",
         3
     )
+
+    wait(1)
+
+    Notification.new(
+        "info",
+        "Discord Link",
+        ".gg/3PwAy6Zy2D - Join our discord for more information.",
+        3
+    )
 end
