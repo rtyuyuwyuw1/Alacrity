@@ -507,6 +507,17 @@ Drawing.new = function(drawingType)
 end
 
 getgenv().Drawing = Drawing
+if getgenv ~= nil then
+    getgenv().Drawing = Drawing
+end
+
+pcall(function()
+    _G.Drawing = Drawing
+end)
+
+if setglobal then
+    pcall(setglobal, "Drawing", Drawing)
+end
 
 getgenv().isrenderobj = function(obj)
     if type(obj) ~= "userdata" then
