@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alacrity</title>
 
+    <link rel="icon" type="image/png" href="assets/Alacrity.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600&family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
@@ -233,191 +235,6 @@
             font-weight: 600;
         }
 
-        .download-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.25s ease, visibility 0.25s ease;
-        }
-
-        .download-modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .download-modal-card {
-            background-color: #111111;
-            border: 1px solid #222222;
-            border-radius: 12px;
-            padding: 24px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.03);
-            transform: scale(0.92) translateY(10px);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-        }
-
-        .download-modal-overlay.active .download-modal-card {
-            transform: scale(1) translateY(0);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #1a1a1a;
-        }
-
-        .modal-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-        }
-
-        .btn-close {
-            background: transparent;
-            border: none;
-            color: #6b7280;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: color 0.2s ease, transform 0.2s ease;
-        }
-
-        .btn-close:hover {
-            color: #ffffff;
-            transform: rotate(90deg);
-        }
-
-        .modal-body {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .custom-dropdown-container {
-            position: relative;
-            flex: 1;
-            user-select: none;
-        }
-
-        .custom-dropdown-header {
-            background: #161616;
-            color: #e5e7eb;
-            border: 1px solid #2a2a2a;
-            padding: 10px 14px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
-        }
-
-        .custom-dropdown-header:hover {
-            background-color: #1c1c1c;
-            border-color: #383838;
-            color: #ffffff;
-        }
-
-        .custom-dropdown-container.active .custom-dropdown-header {
-            border-color: #a33b43;
-            box-shadow: 0 0 0 3px rgba(163, 59, 67, 0.25), inset 0 1px 2px rgba(0, 0, 0, 0.4);
-            background-color: #1a1a1a;
-            color: #ffffff;
-        }
-
-        .dropdown-arrow {
-            font-size: 0.8rem;
-            color: #6b7280;
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
-        }
-
-        .custom-dropdown-container.active .dropdown-arrow {
-            transform: rotate(180deg);
-            color: #a33b43;
-        }
-
-        .custom-dropdown-menu {
-            position: absolute;
-            top: calc(100% + 6px);
-            left: 0;
-            width: 100%;
-            background-color: #141414;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            padding: 4px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
-                        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
-                        visibility 0.25s ease;
-            pointer-events: none;
-        }
-
-        .custom-dropdown-container.active .custom-dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .dropdown-item {
-            padding: 10px 12px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #9ca3af;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.15s ease;
-        }
-
-        .dropdown-item:hover {
-            background-color: #222222;
-            color: #ffffff;
-        }
-
-        .dropdown-item.selected {
-            background-color: rgba(163, 59, 67, 0.15);
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        .dropdown-item.selected::after {
-            content: "\f00c";
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            color: #a33b43;
-            font-size: 0.75rem;
-        }
-
         .legal-modal {
             position: fixed;
             top: 0;
@@ -435,6 +252,55 @@
         .legal-modal.active {
             display: block;
             opacity: 1;
+        }
+
+        #faq-modal,
+        #tos-modal,
+        #privacy-modal {
+            scrollbar-width: thin;
+            scrollbar-color: #4b5563 transparent;
+            padding-right: 4px;
+        }
+
+        #faq-modal::-webkit-scrollbar,
+        #tos-modal::-webkit-scrollbar,
+        #privacy-modal::-webkit-scrollbar {
+            width: 6px;
+            background: transparent;
+        }
+
+        #faq-modal::-webkit-scrollbar-track,
+        #tos-modal::-webkit-scrollbar-track,
+        #privacy-modal::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #faq-modal::-webkit-scrollbar-thumb,
+        #tos-modal::-webkit-scrollbar-thumb,
+        #privacy-modal::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 999px;
+            border: 0;
+        }
+
+        #faq-modal::-webkit-scrollbar-thumb:hover,
+        #tos-modal::-webkit-scrollbar-thumb:hover,
+        #privacy-modal::-webkit-scrollbar-thumb:hover {
+            background-color: #6b7280;
+        }
+
+        @media (min-width: 800px) {
+            #faq-modal::-webkit-scrollbar,
+            #tos-modal::-webkit-scrollbar,
+            #privacy-modal::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            #faq-modal,
+            #tos-modal,
+            #privacy-modal {
+                padding-right: 6px;
+            }
         }
 
         .legal-content-container {
@@ -580,10 +446,6 @@
             .legal-main-title {
                 font-size: 2.8rem;
             }
-            .modal-body {
-                flex-direction: column;
-                align-items: stretch;
-            }
         }
     </style>
 </head>
@@ -603,13 +465,13 @@
         </div>
 
         <p class="description animate-item step-4">
-            Alacrity is free to use, but requires completion of the key system before access is granted.
+            Alacrity is free to use and does not require any keys.
         </p>
 
         <div class="button-group animate-item step-4">
-            <button class="btn-main" onclick="openDownloadModal()">
+            <a href="https://alacrity.eu.cc/Alacrity%20External.zip" class="btn-main" download>
                 <i class="fa-solid fa-download"></i> Download
-            </button>
+            </a>
 
             <button class="btn-expandable" title="FAQ" onclick="openModal('faq-modal')">
                 <i class="fa-regular fa-circle-question"></i>
@@ -625,40 +487,6 @@
         <div class="footer-text animate-item step-4">
             By downloading, you agree to our <a onclick="openModal('tos-modal')">Terms of Service</a> and <a onclick="openModal('privacy-modal')">Privacy Policy</a>.<br>
             <a href="https://Alacrity.eu.cc" class="highlight">Alacrity.eu.cc</a> is the only official domain for this software.
-        </div>
-    </div>
-
-    <div id="download-modal" class="download-modal-overlay" onclick="handleOverlayClick(event)">
-        <div class="download-modal-card">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <i class="fa-solid fa-sliders" style="color: #a33b43;"></i> Option
-                </div>
-                <button class="btn-close" onclick="closeDownloadModal()">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="custom-dropdown-container" id="custom-dropdown">
-                    <div class="custom-dropdown-header" onclick="toggleDropdown()">
-                        <span id="selected-label">Executor</span>
-                        <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
-                    </div>
-
-                    <div class="custom-dropdown-menu">
-                        <div class="dropdown-item selected" data-url="https://alacrity.eu.cc" onclick="selectOption(this)">
-                            Executor
-                        </div>
-                        <div class="dropdown-item" data-url="https://alacrity.eu.cc/Alacrity%20External.zip" onclick="selectOption(this)">
-                            External
-                        </div>
-                    </div>
-                </div>
-
-                <button id="modal-download-btn" class="btn-main" onclick="triggerDownload()">
-                    <i class="fa-solid fa-download"></i> Download
-                </button>
-            </div>
         </div>
     </div>
 
@@ -703,22 +531,22 @@
             <p class="legal-subtitle">Plain English. The rules for accessing and using Alacrity.</p>
 
             <p style="font-size: 0.85rem; color: #a3a3a3; line-height: 1.6; margin-bottom: 24px;">
-                These Terms govern Alacrity accounts, key-system access, downloads, and software. By completing the key system, downloading, installing, or using Alacrity, you agree to these Terms. If you do not agree, do not use Alacrity.
+                These Terms govern access to Alacrity downloads and software. By downloading, installing, or using Alacrity, you agree to these Terms. If you do not agree, do not use Alacrity.
             </p>
 
             <div class="legal-section">
-                <h3>1. Eligibility and account responsibility</h3>
-                <p>You must be legally able to use the service in your region. You are responsible for your account, keys, devices, and activity. Never share passwords, session cookies, one-time codes, access tokens, or device credentials.</p>
+                <h3>1. Eligibility and responsibility</h3>
+                <p>You must be legally able to use the service in your region. You are responsible for your devices and activity. Never share passwords, session cookies, one-time codes, access tokens, or device credentials.</p>
             </div>
 
             <div class="legal-section">
-                <h3>2. Free access and key system</h3>
-                <p>Alacrity is free to use. Access requires completing the official key system, which may issue limited-duration or single-use access. Keys are personal, non-transferable, have no cash value, and may not be sold, traded, or redistributed.</p>
+                <h3>2. Free access</h3>
+                <p>Alacrity is free to use. No key, activation code, or verification step is required to access or use the software.</p>
             </div>
 
             <div class="legal-section">
                 <h3>3. Official sources and downloads</h3>
-                <p>Download Alacrity and obtain keys only through links published on the official Alacrity site. We are not responsible for fake domains, altered builds, unofficial sellers, or third-party scams. Bypassing, sharing, or reselling download and key-system tokens is prohibited.</p>
+                <p>Download Alacrity only through links published on the official Alacrity site. We are not responsible for fake domains, altered builds, unofficial sellers, or third-party scams. Bypassing, sharing, or reselling download tokens is prohibited.</p>
             </div>
 
             <div class="legal-section">
@@ -726,20 +554,20 @@
                 <ul>
                     <li>Redistributing, reselling, sublicensing, cracking, or modifying Alacrity.</li>
                     <li>Using Alacrity for unlawful, harmful, fraudulent, or unauthorized activity.</li>
-                    <li>Bypassing keys, device limits, security controls, or rate limits.</li>
-                    <li>Sharing accounts, keys, sessions, tokens, or device credentials.</li>
+                    <li>Bypassing security controls or rate limits.</li>
+                    <li>Sharing accounts, sessions, tokens, or device credentials.</li>
                     <li>Using Alacrity in a way that violates third-party rules or rights.</li>
                 </ul>
             </div>
 
             <div class="legal-section">
                 <h3>5. Suspension and termination</h3>
-                <p>We may update, pause, suspend, or discontinue Alacrity at any time. Access may be suspended or terminated when we reasonably believe these Terms were violated, licensing was abused, fraud was attempted, or users and systems were placed at risk.</p>
+                <p>We may update, pause, suspend, or discontinue Alacrity at any time. Access may be suspended or terminated when we reasonably believe these Terms were violated, fraud was attempted, or users and systems were placed at risk.</p>
             </div>
 
             <div class="legal-section">
                 <h3>6. Privacy and security</h3>
-                <p>Our Privacy Policy explains how account, key, device, support, request, and security data may be processed. Never paste code into a browser developer console at another person's request; this is a common account-theft technique.</p>
+                <p>Our Privacy Policy explains how device, support, request, and security data may be processed. Never paste code into a browser developer console at another person's request; this is a common account-theft technique.</p>
             </div>
 
             <div class="legal-section">
@@ -759,7 +587,7 @@
             </div>
 
             <div class="legal-footer">
-                Last updated August 2, 2026
+                Last updated October 5, 2026
             </div>
         </div>
     </div>
@@ -774,16 +602,15 @@
             <p class="legal-subtitle">Transparent & Simple. How Alacrity respects and handles your data.</p>
 
             <p style="font-size: 0.85rem; color: #a3a3a3; line-height: 1.6; margin-bottom: 24px;">
-                This Privacy Policy outlines how Alacrity ("we", "our", or "us") collects, uses, and safeguards information when you access our website, complete our key system, or use our software application.
+                This Privacy Policy outlines how Alacrity ("we", "our", or "us") collects, uses, and safeguards information when you access our website or use our software application.
             </p>
 
             <div class="legal-section">
                 <h3>1. Information We Collect</h3>
                 <p>We operate under the principle of minimal data collection necessary for maintaining core functionalities:</p>
                 <ul>
-                    <li><strong>Device Identification:</strong> A anonymized hardware hash (HWID) or IP address may be processed solely to validate key system completions and prevent key abuse or multi-device spoofing.</li>
-                    <li><strong>Key System & Session Data:</strong> Temporary security tokens and access verification timestamps to manage your key validity duration.</li>
                     <li><strong>Technical Logs:</strong> Automatic error logs, software version information, and basic server request headers used strictly for debugging, stability, and anti-DDoS protection.</li>
+                    <li><strong>Device Identification:</strong> An anonymized hardware hash (HWID) or IP address may be processed solely to prevent abuse, rate-limit requests, or protect the service from malicious activity.</li>
                 </ul>
             </div>
 
@@ -791,30 +618,30 @@
                 <h3>2. How We Use Information</h3>
                 <p>Collected technical data is used strictly for the following purposes:</p>
                 <ul>
-                    <li>To verify key system completion and deliver authorized access tokens.</li>
-                    <li>To enforce rate-limiting, detect key bypass mechanisms, and maintain system integrity.</li>
+                    <li>To enforce rate-limiting and maintain system integrity.</li>
                     <li>To monitor platform uptime and diagnose software crashes or compatibility issues.</li>
+                    <li>To protect the service against abuse, fraud, or malicious requests.</li>
                 </ul>
             </div>
 
             <div class="legal-section">
                 <h3>3. Third-Party Links & Services</h3>
-                <p>Our key system and website may integrate or link to third-party services (such as link shorteners, captcha providers, or Discord). We do not control and are not responsible for the privacy practices or content of these third-party websites. We encourage you to review their respective privacy policies.</p>
+                <p>Our website may integrate or link to third-party services (such as link shorteners, captcha providers, or Discord). We do not control and are not responsible for the privacy practices or content of these third-party websites. We encourage you to review their respective privacy policies.</p>
             </div>
 
             <div class="legal-section">
                 <h3>4. Data Protection & Security</h3>
-                <p>We implement appropriate technical measures to prevent unauthorized access, alteration, or destruction of key verification data. We do not store sensitive personal identification details such as real names, financial information, or personal physical addresses.</p>
+                <p>We implement appropriate technical measures to prevent unauthorized access, alteration, or destruction of service data. We do not store sensitive personal identification details such as real names, financial information, or personal physical addresses.</p>
             </div>
 
             <div class="legal-section">
                 <h3>5. Selling & Sharing Data</h3>
-                <p>We do NOT sell, rent, or trade your IP addresses, hardware hashes, or validation records to third parties for advertising or commercial marketing purposes.</p>
+                <p>We do NOT sell, rent, or trade your IP addresses, hardware hashes, or technical logs to third parties for advertising or commercial marketing purposes.</p>
             </div>
 
             <div class="legal-section">
                 <h3>6. Data Retention</h3>
-                <p>Key validation logs, temporary security tokens, and IP request logs are automatically purged or rotated periodically once they are no longer required for system security and access verification.</p>
+                <p>Technical logs, temporary security tokens, and IP request logs are automatically purged or rotated periodically once they are no longer required for system security and service operation.</p>
             </div>
 
             <div class="legal-section">
@@ -823,7 +650,7 @@
             </div>
 
             <div class="legal-footer">
-                Last updated August 22, 2026
+                Last updated October 5, 2026
             </div>
         </div>
     </div>
@@ -844,58 +671,6 @@
                 document.body.style.overflow = 'auto';
             }
         }
-
-        function openDownloadModal() {
-            const downloadModal = document.getElementById('download-modal');
-            downloadModal.classList.add('active');
-        }
-
-        function closeDownloadModal() {
-            const downloadModal = document.getElementById('download-modal');
-            downloadModal.classList.remove('active');
-            const dropdown = document.getElementById('custom-dropdown');
-            if (dropdown) dropdown.classList.remove('active');
-        }
-
-        function handleOverlayClick(event) {
-            if (event.target.id === 'download-modal') {
-                closeDownloadModal();
-            }
-        }
-
-        function toggleDropdown() {
-            const dropdown = document.getElementById('custom-dropdown');
-            dropdown.classList.toggle('active');
-        }
-
-        function selectOption(element) {
-            const labelText = element.innerText.trim();
-            document.getElementById('selected-label').innerText = labelText;
-
-            const items = document.querySelectorAll('.dropdown-item');
-            items.forEach(item => item.classList.remove('selected'));
-            element.classList.add('selected');
-
-            const dropdown = document.getElementById('custom-dropdown');
-            dropdown.classList.remove('active');
-        }
-
-        function triggerDownload() {
-            const selectedItem = document.querySelector('.dropdown-item.selected');
-            if (selectedItem) {
-                const downloadUrl = selectedItem.getAttribute('data-url');
-                if (downloadUrl) {
-                    window.open(downloadUrl, '_blank');
-                }
-            }
-        }
-
-        document.addEventListener('click', function(e) {
-            const dropdown = document.getElementById('custom-dropdown');
-            if (dropdown && !dropdown.contains(e.target)) {
-                dropdown.classList.remove('active');
-            }
-        });
     </script>
 </body>
 </html>
